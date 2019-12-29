@@ -1,5 +1,32 @@
 var _this = this;
 
+
+window.onload = function () {
+    var el = document.getElementById('content');
+    var canv = (document.getElementById('canvas'));
+    var canvText = (document.getElementById('canvasText'));
+
+    var blubberTextInput = document.getElementById('blubberText');
+
+    blubberTextInput.addEventListener('change', updateBlubberText);
+
+    _this.flowLoop = new FlowLoop(el, canv, canvText);
+    _this.flowLoop.start();
+};
+
+
+
+function updateBlubberText(e) {
+    if (flowLoop) {
+        flowLoop.blubberString = e.target.value;
+        flowLoop.blubberText = undefined;
+        //flowLoop.frameNr = -1;
+    }
+}
+
+
+
+
 function FlowLoop(element, canv, canvText) {
     this.element = element;
     this.element.innerHTML += "#objects: ";
@@ -12,7 +39,6 @@ function FlowLoop(element, canv, canvText) {
     this.bgColor = 'cyan';
     this.objectList = [];
 
-    //this.currFramePos = new Point(0,0);
     this.moveSpeed = new Point(-9,0);
 
     this.nextBlubber = 0;
@@ -22,6 +48,7 @@ function FlowLoop(element, canv, canvText) {
     this.branching = 3;
     this.hue = 120;
 
+    this.blubberString = 'bin der GLASFISCH !';
 }
 
 FlowLoop.prototype.start = function () {
@@ -39,15 +66,21 @@ FlowLoop.prototype.nextFrame = function () {
     if (this.objectList != null)
         this.span.innerHTML = this.objectList.length.toString();
         
-    // generate rocket:
+    // generate fish:
     if (this.frameNr == 0) {
-        this.rocket = new Rocket(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2, 15);
-        this.rocket.speed = new Point(-this.moveSpeed.x, -this.moveSpeed.y+2);
-        this.objectList.push(this.rocket);
-
-        this.blubberText = new BlubberText(this.ctxText, this.ctx, 'HEY GLASFISCH! Was blubberst du so? ');
+        this.fish = new Fish(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2, 15);
+        this.fish.speed = new Point(-this.moveSpeed.x, -this.moveSpeed.y+2);
+        this.objectList.push(this.fish);
+    }
+    if (this.blubberText == undefined) {
+        //this.ctxText.canvas.fil
+        this.blubberText = new BlubberText(this.ctxText, this.ctx, this.blubberString);
+        this.nextBlubberText = 0;
     }
 
+    //this.blubberString = document.getElementById('blubberText').textContent;
+    //this.blubberText = new BlubberText(this.ctxText, this.ctx, this.blubberString);
+ 
 
     // generate mountains:
     this.nextMountain--;
@@ -96,7 +129,7 @@ FlowLoop.prototype.nextFrame = function () {
         this.nextBlubberText = 0;
 
         for (var i = 0; i < 20; i++) {
-            var origin = this.rocket.points[0].add(this.rocket.dir.mult(this.rocket.size*3));
+            var origin = this.fish.points[0].add(this.fish.dir.mult(this.fish.size*3));
             var bubble = this.blubberText.getNextBlob(origin);
             if (bubble != null) this.objectList.push(bubble);
         }
@@ -139,27 +172,23 @@ FlowLoop.prototype.nextFrame = function () {
 FlowLoop.prototype.keyAction = function (e) {
     if (e.keyCode == 39) {
         //this.bgColor = 'cyan';
-        //this.rocket.speed.x += 1;
-        this.rocket.speed = this.rocket.speed.mult(1.1);
+        this.fish.speed = this.fish.speed.mult(1.1);
     }
     else if (e.keyCode == 37) {
         //this.bgColor = 'white';
-        //this.rocket.speed.x += -1;
-        this.rocket.speed = this.rocket.speed.mult(1.0/1.1);
+         this.fish.speed = this.fish.speed.mult(1.0/1.1);
     }
     else if (e.keyCode == 38) {
         //this.bgColor = 'pink';
-        this.rocket.speed = this.rocket.speed.rotate(-10);
-        this.rocket.dir = this.rocket.speed.normalized();
-        this.rocket.makePoints();
-        //this.rocket.move(new Point(0, 8));
+        this.fish.speed = this.fish.speed.rotate(-10);
+        this.fish.dir = this.fish.speed.normalized();
+        this.fish.makePoints();
     }
     else if (e.keyCode == 40) {
         //this.bgColor = 'red';
-        this.rocket.speed = this.rocket.speed.rotate(10);
-        this.rocket.dir = this.rocket.speed.normalized();
-        this.rocket.makePoints();
-        //this.rocket.move(new Point(0, -8));
+        this.fish.speed = this.fish.speed.rotate(10);
+        this.fish.dir = this.fish.speed.normalized();
+        this.fish.makePoints();
     }
     else if (e.keyCode == 88) { // x
         this.branching++;
@@ -175,14 +204,6 @@ FlowLoop.prototype.keyAction = function (e) {
 
 
 
-
-window.onload = function () {
-    var el = document.getElementById('content');
-    var canv = (document.getElementById('canvas'));
-    var canvText = (document.getElementById('canvasText'));
-    _this.flowLoop = new FlowLoop(el, canv, canvText);
-    _this.flowLoop.start();
-};
 
 window.onkeydown = function (e) {
     _this.flowLoop.keyAction(e);

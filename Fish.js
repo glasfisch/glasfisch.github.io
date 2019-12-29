@@ -1,5 +1,5 @@
 
-function Rocket(x0, y0, size) {
+function Fish(x0, y0, size) {
 
     this.speed = new Point(0,0);
     this.points = [];
@@ -115,7 +115,6 @@ function Rocket(x0, y0, size) {
         
         objectList.push(this);
 
-        // generate rocket exhaust:
         //this.nextBlob--;
         if (this.nextBlob < 0) {
             this.nextBlob = Math.random() * 5;

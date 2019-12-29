@@ -25,6 +25,8 @@ function BlubberText(ctxText, ctx, text) {
         ctx.font = fontHeight + "px Helvetica";
         //ctx.font = fontHeight + "px Comic Sans MS";
         
+        //ctx.fillStyle = 'blue';
+        //ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.fillStyle = 'red';
         ctx.fillText(text, 2, ctx.canvas.height);
         this.width = Math.ceil(ctx.measureText(text).width);
