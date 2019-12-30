@@ -48,7 +48,7 @@ function FlowLoop(element, canv, canvText) {
     this.branching = 3;
     this.hue = 120;
 
-    this.blubberString = 'Alles Gute für 2020 am Waldhaus, im Pferdehof, auf dem Etzberg und im Wäldchen ! ';
+    this.blubberString = 'Alles Gute für 2020 !  am Waldhaus  im Pferdehof  auf dem Etzberg  und im Wäldchen ';
 }
 
 FlowLoop.prototype.start = function () {
